@@ -1,0 +1,39 @@
+<div style="font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1>Mon Explorateur de Collections Pexels</h1>
+  
+  <%= form_with url: root_path, method: :get, local: true, style: "margin-bottom: 30px;" do |form| %>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <%= form.label :collection_id, "ID de votre Collection :" %>
+      <%= form.text_field :collection_id, 
+                          value: params[:collection_id], 
+                          placeholder: "Exemple: adkmjqz", 
+                          style: "padding: 8px; width: 200px;" %>
+      <%= form.submit "Afficher la galerie", style: "padding: 8px 15px; cursor: pointer;" %>
+    </div>
+  <% end %>
+
+  <hr style="border: 0; border-top: 1px solid #ccc; margin-bottom: 30px;">
+
+  <% if @photos.any? %>
+    <h2>Photos trouvées :</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px;">
+      <% @photos.each do |media| %>
+        <% if media["type"] == "Photo" %>
+          <div style="border: 1px solid #eee; border-radius: 8px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <img src="<%= media['src']['medium'] %>" 
+                 alt="<%= media['alt'] %>" 
+                 style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px;">
+            <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #555;">
+              <strong>Photographe :</strong> <%= media['photographer'] %>
+            </p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% elsif params[:collection_id].present? %>
+    <p style="color: #d9534f; font-weight: bold;">Aucun média trouvé. Vérifiez l'ID de votre collection ou vos clés API.</p>
+  <% else %>
+    <p style="color: #666; font-style: italic;">Entrez un identifiant de collection ci-dessus pour charger les images.</p>
+  <% end %>
+</div>
+
